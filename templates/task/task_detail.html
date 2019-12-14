@@ -1,0 +1,58 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="span6">
+    <div class="widget-title">
+            <h5>Task Details</h5>
+          </div>
+                <table class="table table-bordered table-invoice">
+                  <tbody>
+                    <tr>
+                    <tr>
+                      <td class="width30">Project Title: </td>
+                      <td class="width70"><strong>{{ task.project.name }}</strong></td>
+                    </tr>
+                    <tr>
+                      <td class="width30">Task Title: </td>
+                      <td class="width70"><strong>{{ task.name }}</strong></td>
+                    </tr>
+                    <tr>
+                      <td class="width30">Task Description: </td>
+                      <td class="width70"><strong>{{ task.description }}</strong></td>
+                    </tr>
+                    <tr>
+                    <td class="width30">Task Deadline: </td>
+                      <td class="width70"><strong>{{ task.deadline }}</strong></td>
+                    </tr>
+                    <tr>
+                    <td class="width30">Task Status: </td>
+                      <td class="width70"><strong>{{ task.get_status_display }}</strong></td>
+                    </tr>
+                    <tr>
+
+                        {% if dev %}
+                            <td class="width30">Assigned Developers: </td>
+                            {% for devops in dev %}
+                                <td class="width30"><strong>{{ devops.user.name }} by {{ devops.user.allocation }}</strong></td>
+                            {% endfor %}
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        {% if ui %}
+                            <td class="width30">Assigned UI Designers: </td>
+                            {% for designers in ui %}
+                                <td class="width70"><strong>{{ designers.user.name }}</strong></td>
+                            {% endfor %}
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        {% if qa %}
+                            <td class="width30">Assigned QA: </td>
+                            {% for designers in qa %}
+                                <td class="width70"><strong>{{ designers.user.name }}</strong></td>
+                            {% endfor %}
+                        {% endif %}
+                    </tr>
+                    </tbody>
+                </table>
+              </div>
+{% endblock %}

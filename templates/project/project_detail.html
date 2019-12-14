@@ -1,0 +1,73 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="span6">
+    <div class="widget-title">
+            <h5>Project Details</h5>
+          </div>
+                <table class="table table-bordered table-invoice">
+                  <tbody>
+                    <tr>
+                    <tr>
+                      <td class="width30">Project Title: </td>
+                      <td class="width70"><strong>{{ project.name }}</strong></td>
+                    </tr>
+                    <tr>
+                      <td class="width30">Project Description: </td>
+                      <td class="width70"><strong>{{ project.description }}</strong></td>
+                    </tr>
+                    <tr>
+                    <td class="width30">Project Starting Date: </td>
+                      <td class="width70"><strong>{{ project.start_date }}</strong></td>
+                    </tr>
+                    <tr>
+                    <td class="width30">Project Ending Date: </td>
+                      <td class="width70"><strong>{{ project.end_date }}</strong></td>
+                    </tr>
+                    <tr>
+                    <td class="width30">Project Status: </td>
+                      <td class="width70"><strong>{{ project.get_status_display }}</strong></td>
+                    </tr>
+                    <tr>
+                    <td class="width30">Teamlead: </td>
+                        {% if lead %}
+                            {% for l in lead %}
+                                <td class="width30"><strong>{{ l.user.username }}</strong></td>
+                            {% endfor %}
+                        {% else %}
+                                <td class="width30"><strong>-</strong></td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                    <td class="width30">Project Developers: </td>
+                        {% if dev %}
+                            {% for devops in dev %}
+                                <td class="width30"><strong>{{ devops.user.username }}</strong></td>
+                            {% endfor %}
+                        {% else %}
+                                <td class="width30"><strong>-</strong></td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                    <td class="width30">Project UI Designers: </td>
+                        {% if ui %}
+                            {% for designers in ui %}
+                                <td class="width70"><strong>{{ designers.user.username }}</strong></td>
+                            {% endfor %}
+                        {% else %}
+                                <td class="width30"><strong>-</strong></td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                    <td class="width30">Project QA: </td>
+                        {% if qa %}
+                            {% for q in qa %}
+                                <td class="width70"><strong>{{ q.user.username }}</strong></td>
+                            {% endfor %}
+                        {% else %}
+                                <td class="width30"><strong>-</strong></td>
+                        {% endif %}
+                    </tr>
+                    </tbody>
+                </table>
+              </div>
+{% endblock %}

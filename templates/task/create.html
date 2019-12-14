@@ -1,0 +1,44 @@
+{% extends "index.html" %}
+
+{% load crispy_forms_tags %}
+
+{% load i18n %}
+
+{% block content %}
+<div class="row-fluid">
+    <div class="span6">
+      <div class="widget-box">
+        <div class="widget-title">
+          <h5>Task Creation Form</h5>
+        </div>
+        <div class="widget-content nopadding">
+          <form action="{% url 'createtask' %}" method="post" class="form-horizontal">
+           {% csrf_token %}
+              {% for field in form %}
+            <div class="control-group">
+              <label class="control-label">{{ field.label_tag }}</label>
+              <div class="controls">
+                {{ field }}
+                {{ field.errors }}
+              </div>
+            </div>
+              {% endfor %}
+              <div class="control-group">
+              <label class="control-label">Deadline:</label>
+              <div class="controls">
+                  <input type="date" name="deadline" />
+              </div>
+              {{ errors }}
+            </div>
+              <div class="form-actions">
+              <button type="submit" class="btn btn-success">Create Task</button>
+              </div>
+              {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+              {% endif %}<br>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}

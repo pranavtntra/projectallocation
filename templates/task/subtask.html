@@ -1,0 +1,64 @@
+{% extends "index.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% load i18n %}
+
+{% block content %}
+    <div class="row-fluid">
+        <div class="span6">
+          <div class="widget-box">
+            <div class="widget-title">
+              <h5>Sub-Task Creation Form</h5>
+            </div>
+            <div class="widget-content nopadding">
+              <form action="{% url 'createsubtask' %}" method="post" class="form-horizontal">
+               {% csrf_token %}
+                  <div class="control-group">
+                    <label class="control-label">Please select Project:</label>
+                    <div class="controls">
+                        <select name="project" id="project" data-url='{% url "validate_task" %}'>
+                            {% for nameofproject in project %}
+                            <option value="{{ nameofproject.id }}">{{ nameofproject }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                  <div class="control-group">
+                    <label class="control-label">Please select Task:</label>
+                    <div class="controls">
+                        <select name="task" id="div-task">
+                        </select>
+                    </div>
+                </div>
+                  {% for field in form %}
+                <div class="control-group">
+                  <label class="control-label">{{ field.label_tag }}</label>
+                  <div class="controls">
+                    {{ field }}
+                    {{ field.errors }}
+                  </div>
+                </div>
+                  {% endfor %}
+                  <div class="control-group">
+                  <label class="control-label">Deadline:</label>
+                  <div class="controls">
+                      <input type="date" name="deadline" />
+                  </div>
+                  {{ errors }}
+                  {{ error }}
+                </div>
+                  <div class="form-actions">
+                  <button type="submit" class="btn btn-success">Create Sub-Task</button>
+                  </div>
+                  {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                  {% endif %}<br>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="{% static 'js/validate_task.js' %}"></script>
+{% endblock %}

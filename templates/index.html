@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+{% load static %}
+{% load crispy_forms_tags %}
+
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+<title>Project Allocation</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+<link rel="stylesheet" href="{% static 'css/bootstrap-responsive.min.css' %}" />
+<link rel="stylesheet" href="{% static 'css/fullcalendar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/matrix-style.css' %}" />
+<link rel="stylesheet" href="{% static 'css/matrix-media.css' %}" />
+<link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
+<link rel="stylesheet" href="{% static 'css/jquery.gritter.css' %}" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+</head>
+<body>
+{% if user.is_authenticated and user.verification %}
+<!--Header-part-->
+  <div id="header">
+    <h1><a href="{% url 'userdashboard' %}">Project Alloacation</a></h1>
+  </div>
+  <!--close-Header-part-->
+
+  <!--start-top-logout-->
+  <div id="search">
+    <li class=""><a href="{% url 'account_logout' %}"><i class="icon icon-share-alt"></i> <span class="text">Logout {{ user.username }}</span></a></li>
+  </div>
+  <!--close-top-logout-->
+  <!--sidebar-menu-->
+  <div id="sidebar"><a href="{% url 'userdashboard' %}" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
+    <ul>
+      <li class="ui-state-active"><a href="{% url 'userdashboard' %}"><i class="icon icon-home"></i> <span>Dashboard</span></a></li>
+      {% if user.is_superuser %}
+        <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Project</span> <span class="label label-important"></span></a>
+          <ul>
+            <li><a href="{% url 'projectlist' %}">Project List</a></li>
+            <li><a href="{% url 'projecthealth' %}">Projects Health</a></li>
+            <li><a href="{% url 'createproject' %}">Create Project</a></li>
+            <li><a href="{% url 'assignleader' %}">Assign Team Leader</a></li>
+            <li><a href="{% url 'leadlist' %}">Update or Remove Team Leader</a></li>
+            <li><a href="{% url 'allocateemployee' %}">Allocate Employee</a></li>
+            <li><a href="{% url 'allocationlist' %}">Update or Remove Allocation</a></li>
+          </ul>
+        </li>
+        <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Task</span> <span class="label label-important"></span></a>
+          <ul>
+            <li><a href="{% url 'tasklist' %}">Task List</a></li>
+            <li><a href="{% url 'createtask' %}">Create Task</a></li>
+            <li><a href="{% url 'createsubtask' %}">Create Sub-Task</a></li>
+            <li><a href="{% url 'allocateemployee_task' %}">Allocate Employee To Task</a></li>
+          </ul>
+        </li>
+        <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Employee</span> <span class="label label-important"></span></a>
+          <ul>
+            <li><a href="{% url 'employeelist' %}">Employee List</a></li>
+            <li><a href="{% url 'signingup' %}">Add Employee</a></li>
+            <li><a href="{% url 'generatereport' %}">Generate Employee Report</a></li>
+          </ul>
+      {% elif user.is_staff %}
+          <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Project</span> <span class="label label-important"></span></a>
+          <ul>
+            <li><a href="{% url 'projectlistforlead' %}">Project List</a></li>
+            <li><a href="{% url 'allocateemployeebylead' %}">Allocate Employee</a></li>
+            <li><a href="{% url 'allocationlistforlead' %}">Update or Remove Allocation</a></li>
+          </ul>
+        </li>
+      <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Task</span> <span class="label label-important"></span></a>
+          <ul>
+            <li><a href="{% url 'tasklistforlead' %}">Task List</a></li>
+            <li><a href="{% url 'taskbylead' %}">Create Task</a></li>
+            <li><a href="{% url 'subtaskbylead' %}">Create Sub-Task</a></li>
+            <li><a href="{% url 'allocateemployee_task_lead' %}">Allocate Employee To Task</a></li>
+          </ul>
+        </li>
+      <li class="menu"> <a href="{% url 'generatereport' %}"><i class="icon icon-list-alt"></i> <span>Generate Employee Report</span> <span class="label label-important"></span></a>
+      {% else %}
+        <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Project</span> <span class="label label-important"></span></a>
+          <ul>
+            <li><a href="{% url 'projectlistforemployee' %}">Project List</a></li>
+          </ul>
+        </li>
+        <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Task</span> <span class="label label-important"></span></a>
+          <ul>
+            <li><a href="{% url 'tasklistforusers' %}">Task List</a></li>
+            <li><a href="{% url 'subtaskbydeveloper' %}">Create Sub-Task</a></li>
+          </ul>
+        </li>
+        <li class="menu"> <a href="{% url 'generatereport' %}"><i class="icon icon-list-alt"></i> <span>Generate Employee Report</span> <span class="label label-important"></span></a>
+      {% endif %}
+    </ul>
+  </div>
+  <!--sidebar-menu-->
+
+  <!--main-container-part-->
+<div id="content">
+  <!--breadcrumbs-->
+  <div id="content-header">
+    {% block content %}
+    {% endblock %}
+  </div>
+</div>
+  <!--End-breadcrumbs-->
+{% else %}
+<br>
+  <label style="color:white;">Please verify your email and then </label>
+  <form method="post" action="{% url 'account_logout' %}">
+  {% csrf_token %}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+  {% endif %}
+  <button type="submit" class="btn btn-success">Log in</button>
+</form>
+{% endif %}
+<script src="{% static 'js/excanvas.min.js' %}"></script>
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery.ui.custom.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.flot.min.js' %}"></script>
+<script src="{% static 'js/jquery.flot.resize.min.js' %}"></script>
+<script src="{% static 'js/jquery.peity.min.js' %}"></script>
+<script src="{% static 'js/fullcalendar.min.js' %}"></script>
+<script src="{% static 'js/matrix.js' %}"></script>
+<script src="{% static 'js/matrix.dashboard.js' %}"></script>
+<script src="{% static 'js/jquery.gritter.min.js' %}"></script>
+<script src="{% static 'js/matrix.interface.js' %}"></script>
+<script src="{% static 'js/matrix.chat.js' %}"></script>
+<script src="{% static 'js/jquery.validate.js' %}"></script>
+<script src="{% static 'js/matrix.form_validation.js' %}"></script>
+<script src="{% static 'js/jquery.wizard.js' %}"></script>
+<script src="{% static 'js/jquery.uniform.js' %}"></script>
+<script src="{% static 'js/select2.min.js' %}"></script>
+<script src="{% static 'js/matrix.popover.js' %}"></script>
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/matrix.tables.js' %}"></script>
+
+<script type="text/javascript">
+  // This function is called from the pop-up menus to transfer to
+  // a different page. Ignore if the value returned is a null string:
+  function goPage (newURL) {
+
+      // if url is empty, skip the menu dividers and reset the menu selection to default
+      if (newURL != "") {
+      
+          // if url is "-", it is this page -- reset the menu:
+          if (newURL == "-" ) {
+              resetMenu();            
+          } 
+          // else, send page to designated URL            
+          else {  
+            document.location.href = newURL;
+          }
+      }
+  }
+
+// resets the menu selection upon entry to this page:
+function resetMenu() {
+   document.gomenu.selector.selectedIndex = 2;
+}
+</script>
+</body>
+</html>

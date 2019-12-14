@@ -1,0 +1,79 @@
+{% extends "index.html" %}
+
+{% load crispy_forms_tags %}
+
+{% load i18n %}
+
+{% block content %}
+    <div class="row-fluid">
+        <div class="span6">
+          <div class="widget-box">
+            <div class="widget-title">
+              <h5>Fill details to generate report</h5>
+            </div>
+            <div class="widget-content nopadding">
+              <form action="{% url 'generatereport' %}" method="post" class="form-horizontal">
+               {% csrf_token %}
+                  {% if user.is_staff or user.is_superuser %}
+                      <div class="control-group">
+                        <label class="control-label">Please select User:</label>
+                        <div class="controls">
+                            <select name="user" id="user" title="Please select user">
+                                {% for nameofuser in employee %}
+                                <option value="{{ nameofuser.id }}">{{ nameofuser.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                  {% endif %}
+                  <div class="control-group" title="Please select month and year">
+                  <label class="control-label">Year: </label>
+                  <div class="controls">
+                      <input type="number" min="2000" max="3000" name="year" />
+                  </div>
+                  {{ errors }}
+                  {% if error %}
+                      {{ error }}
+                  {% endif %}
+                </div>
+                <div class="form-actions">
+                  <button  type="submit" name="view" class="btn btn-success" title="Click here to View">View</button>
+                  <button type="submit" name="download" class="btn btn-success" title="Click here to download">Download</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+{% if data %}
+    <div class="span6">
+            <div class="widget-box">
+              <div class="widget-title"> <span class="icon"><i class="icon-time"></i></span>
+                <h5>Employee Report</h5>
+              </div>
+              <div class="widget-content nopadding">
+                <table class="table table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Month</th>
+                      <th>Project</th>
+                      <th>Alloted Work(in percent)</th>
+                      <th>Role</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for d in data %}
+                    <tr>
+                      <td class="taskDesc">{{ d.element1 }}</td>
+                      <td class="taskDesc">{{d.element2}}</td>
+                      <td class="taskDesc">{{d.element3}}</td>
+                      <td class="taskDesc">{{d.element4}}</td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+    </div>
+{% endif %}
+{% endblock %}

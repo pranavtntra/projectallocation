@@ -1,0 +1,102 @@
+{% extends "index.html" %}
+
+{% load crispy_forms_tags %}
+
+{% load i18n %}
+
+{% block content %}
+{% if not project %}
+    <div class="row-fluid">
+        <div class="span6">
+          <div class="widget-box">
+            <div class="widget-title">
+              <h5>Project Creation Form</h5>
+            </div>
+            <div class="widget-content nopadding">
+              <form action="{% url 'createproject' %}" method="post" class="form-horizontal">
+               {% csrf_token %}
+                  {% for field in form %}
+                <div class="control-group">
+                  <label class="control-label">{{ field.label_tag }}</label>
+                  <div class="controls">
+                    {{ field }}
+                    {{ field.errors }}
+                  </div>
+                </div>
+                  {% endfor %}
+                  <div class="control-group">
+                    <label class="control-label">Allocate Lead:</label>
+                    <div class="controls">
+                        <select name="lead" >
+                            {% for nameofemployee in employee %}
+                            <option value="{{ nameofemployee.id }}" selected>{{ nameofemployee.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                  </div>
+                  <div class="control-group">
+                  <label class="control-label">Start date:</label>
+                  <div class="controls">
+                      <input type="date" name="start_date" />
+                  </div>
+                </div>
+                  <div class="control-group">
+                  <label class="control-label">End date:</label>
+                  <div class="controls">
+                      <input type="date" name="end_date" />
+                  </div>
+                      {{ errors }}
+                </div>
+                  <div class="form-actions">
+                  <button type="submit" class="btn btn-success">Create Project</button>
+                  </div>
+                  {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                  {% endif %}<br>
+              </form>
+            </div>
+          </div>
+        </div>
+        <p><strong>** Employee allocation is not compulsory.</strong></p>
+    </div>
+{% else %}
+    <div class="row-fluid">
+        <div class="span6">
+          <div class="widget-box">
+            <div class="widget-title">
+              <h5>Employee Allocation Form</h5>
+            </div>
+            <div class="widget-content nopadding">
+              <form action="{% url 'allocateemployee' %}" method="post" class="form-horizontal">
+               {% csrf_token %}
+                  {% for field in form %}
+                <div class="control-group">
+                  <label class="control-label">{{ field.label_tag }}</label>
+                  <div class="controls">
+                    {{ field }}
+                    {{ field.errors }}
+                  </div>
+                </div>
+                  {% endfor %}
+                  <div class="control-group">
+              <label class="control-label">Allocation in Percentage:</label>
+              <div class="controls">
+                  <input type="number" pattern="[0-9]{1}{2}{3}" name="percentage">
+              </div>
+            </div>
+                      {{ errors }}
+                  <div class="form-actions">
+                  <button type="submit" class="btn btn-success">Allocate</button>
+                      <input type="hidden" name="project" value="{{ project }}" />
+                  </div>
+                  {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                  {% endif %}<br>
+              </form>
+            </div>
+          </div>
+        </div>
+        <p><strong>** Employee allocation is not compulsory.</strong></p>
+    </div>
+{% endif %}
+{% endblock %}

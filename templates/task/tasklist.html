@@ -1,0 +1,228 @@
+{% extends "index.html" %}
+{% load crispy_forms_tags %}
+{% load tasks_tags %}
+{% load static %}
+{% load i18n %}
+{% load bootstrap4 %}
+
+{% block content %}
+    {% if error %}
+      <p><strong>{{ error }}</strong></p>
+    {% endif %}
+              {% if user.is_superuser %}
+                <form method="get" action="{% url 'tasksearch' %}">
+                  <div id="search" style="float: left;">
+                    <button><a href="{% url 'tasklist' %}">Reset</a></button>
+                    <input type="text" name="q" placeholder="Search here..." />
+                    <button  type="submit" class="tip-bottom" ><i class="icon-search icon-white"></i></button>
+                  </div>
+                </form>
+                <br>
+              {% endif %}
+              {% if user.is_staff %}
+                {% if not user.is_superuser %}
+                  <form method="get" action="{% url 'leadtasksearch' %}">
+                    <div id="search">
+                      <button><a href="{% url 'tasklistforlead' %}">Reset</a></button>
+                      <input type="text" name="q" placeholder="Search here..." />
+                      <button  type="submit" class="tip-bottom" ><i class="icon-search icon-white"></i></button>
+                    </div>
+                  </form>
+                  <br>
+                {% endif %}
+              {% endif %}
+              {% if not user.is_staff %}
+                {% if not user.is_superuser %}
+                  <form method="get" action="{% url 'employeetasksearch' %}">
+                    <div id="search">
+<!--                      <button><a href="{% url 'tasklist' %}">Reset</a></button>-->
+                      <input type="text" name="q" placeholder="Search here..." />
+                      <button  type="submit" class="tip-bottom" ><i class="icon-search icon-white"></i></button>
+                    </div>
+                  </form>
+                  <br>
+                {% endif %}
+              {% endif %}
+<style>
+  table, th, td{
+
+  }
+th {
+    cursor: pointer;
+}
+</style>
+{% if task_list %}
+  <div class="span6">
+          <div class="widget-box">
+            <div class="widget-title">
+              <h5>Task List</h5>
+              <div style="float:right; margin-right:10px">
+                {% if user.is_superuser %}
+                  <form method="get" action="{% url 'tasksort' %}">
+                      <select name="select" style="width: 120px;">
+                        <option value="nd">By task ↑</option>
+                        <option value="na" selected>By task ↓</option>
+                        <option value="dd">By deadline ↑</option>
+                        <option value="da">By deadline ↓</option>
+                      </select>
+                      <button  type="submit" class="tip-bottom" style="margin-bottom: 10px;">Sort</button>
+                    <input type="hidden" value="{{ q }}" name="q">
+                  </form>
+                {% endif %}
+                {% if user.is_staff %}
+                  {% if not user.is_superuser %}
+                    <form method="get" action="{% url 'tasksortforlead' %}">
+                        <select name="select" style="width: 120px;">
+                          <option value="nd">By task ↑</option>
+                          <option value="na" selected>By task ↓</option>
+                          <option value="dd">By deadline ↑</option>
+                          <option value="da">By deadline ↓</option>
+                        </select>
+                        <button  type="submit" class="tip-bottom" style="margin-bottom: 10px;">Sort</button>
+                      <input type="hidden" value="{{ q }}" name="q">
+                    </form>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </div>
+            <div class="widget-content nopadding">
+              <table class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th>Task</th>
+                    <th>Project</th>
+                    <th>Parent Task</th>
+                    <th>Status</th>
+                    <th>Assigned Employees</th>
+                    <th>Deadline</th>
+                    {% if user.is_superuser or user.is_staff %}
+                      <th>Update/Remove</th>
+                    {% else %}
+                      <th>Update</th>
+                    {% endif %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for task in task_list %}
+                  <input type="hidden" id="custId" name="employeeid" value="{{ task.id }}">
+                    <tr>
+                      <td class="taskDesc"><a href="{% url 'taskdetail' task.id %}" class="tip-top" data-original-title="Task details"><i class="icon-info-sign"></i>{{ task.name }}</a></td>
+                      <td class="taskStatus">{{ task.project.name }}</td>
+                      {% if not task.parent.name %}
+                        <td class="taskStatus">-</td>
+                      {% else %}
+                        <td class="taskStatus">{{ task.parent.name }}</td>
+                      {% endif %}
+                      {% if task.get_status_display == "Merged" %}
+                        <td class="taskStatus"><span class="in-done">{{ task.get_status_display }}</span></td>
+                      {% elif task.get_status_display == "Approved" %}
+                        <td class="taskStatus"><span class="in-done">{{ task.get_status_display }}</span></td>
+                      {% elif task.get_status_display == "Under UAT" %}
+                        <td class="taskStatus"><span class="pending">{{ task.get_status_display }}</span></td>
+                      {% elif task.get_status_display == "Under QA" %}
+                        <td class="taskStatus"><span class="pending">{{ task.get_status_display }}</span></td>
+                      {% elif task.get_status_display == "WIP" %}
+                        <td class="taskStatus"><span class="in-progress">{{ task.get_status_display }}</span></td>
+                      {% else %}
+                        <td class="taskStatus"><span class="in-progress"  >{{ task.get_status_display }}</span></td>
+                      {% endif %}
+                      <td class="span6">
+                      {% get_task_assigines task as abcd %}
+                      {% for al in abcd %}
+                        <strong>Assigned Employee: </strong>
+                        <ol>
+                          <li>
+                            {{ al.user.username }}<br>
+                          </li>
+
+                        </ol>
+                        <br>
+                      {% endfor %}
+                    </td>
+                      <td class="taskStatus">{{ task.deadline }}</td>
+                     <td class="taskOptions"><a href="{% url 'taskupdate' task.id %}" class="tip-top" data-original-title="Update"><i class="icon-pencil"></i></a>
+                      {% if user.is_superuser or user.is_staff %}
+                        <a href="{% url 'taskdelete' task.id %}" class="tip-top" data-original-title="Delete"><i class="icon-remove"></i></a></td>
+                      {% else %}
+                        </td>
+                      {% endif %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+    {% if is_paginated %}
+        <nav aria-label="Page navigation example">
+          <div class="pagination dataTables_paginate fg-buttonset ui-buttonset fg-buttonset-multi ui-buttonset-multi paging_full_numbers">
+            {% if page_obj.has_previous %}
+                <a class="previous fg-button ui-button ui-state-default page-link ui-state-disabled" href="?page={{ page_obj.previous_page_number }}"><strong>&laquo;</strong></a>
+            {% else %}
+              <a class="previous fg-button ui-button ui-state-default page-link ui-state-default"><span>&laquo;</span></a>
+            {% endif %}
+            {% for i in paginator.page_range %}
+              {% if page_obj.number == i %}
+                <a class="page-item active page-link fg-button ui-button ui-state-disabled" href="#"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+              {% else %}
+                <a class="page-link fg-button ui-button ui-state-default" href="?page={{ i }}">{{ i }}</a>
+              {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}" class="page-item page-link page-link fg-button ui-button ui-state-disabled">&raquo;</a>
+            {% else %}
+              <a class="page-link fg-button ui-button ui-state-default ui-state-default"><span>&raquo;</span></a>
+            {% endif %}
+          </div>
+        </nav>
+    {% endif %}
+      {% if task_list.has_other_pages %}
+        <nav aria-label="Page navigation example">
+          <div class="pagination dataTables_paginate fg-buttonset ui-buttonset fg-buttonset-multi ui-buttonset-multi paging_full_numbers">
+            {% if task_list.has_previous %}
+                <a class="previous fg-button ui-button ui-state-default page-link ui-state-disabled" href="?page={{ task_list.previous_page_number }}&q={{ q }}&select={{ name }}"><strong>&laquo;</strong></a>
+            {% else %}
+                <a class="previous fg-button ui-button ui-state-default page-link ui-state-default"><span>&laquo;</span></a>
+            {% endif %}
+            <span>
+              {% for i in task_list.paginator.page_range %}
+                {% if task_list.number == i %}
+                   <a class="page-item active page-link fg-button ui-button ui-state-disabled" href="#"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                {% else %}
+                  <a class="page-link fg-button ui-button ui-state-default" href="?page={{ i }}&q={{ q }}&select={{ name }}">{{ i }}</a>
+                {% endif %}
+              {% endfor %}
+              {% if task_list.has_next %}
+                <a href="?page={{ task_list.next_page_number }}&q={{ q }}&select={{ name }}" class="page-item page-link page-link fg-button ui-button ui-state-disabled">&raquo;</a>
+              {% else %}
+                <a class="page-link fg-button ui-button ui-state-default ui-state-default"><span>&raquo;</span></a>
+              {% endif %}
+            </span>
+          </div>
+        </nav>
+  {% endif %}
+{% else %}
+  {% if error %}
+      <p><strong>{{ error }}</strong></p>
+  {% else %}
+    <p>You are not allowed in any project which has tasks.</p>
+  {% endif %}
+  </div>
+{% endif %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+  $('th').click(function(){
+      var table = $(this).parents('table').eq(0)
+      var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+      this.asc = !this.asc
+      if (!this.asc){rows = rows.reverse()}
+      for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+  })
+  function comparer(index) {
+      return function(a, b) {
+          var valA = getCellValue(a, index), valB = getCellValue(b, index)
+          return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+      }
+  }
+  function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
+</script>
+{% endblock %}

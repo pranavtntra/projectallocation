@@ -1,0 +1,39 @@
+{% extends "index.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% load i18n %}
+
+{% block content %}
+<div class="row-fluid">
+    <div class="span6">
+      <div class="widget-box">
+        <div class="widget-title">
+          <h5>Remove Employee from project</h5>
+        </div>
+        <div class="widget-content nopadding">
+          <form method="post" class="form-horizontal">
+           {% csrf_token %}
+              <input type="hidden" name="data-id" value="{{ object.user.id }}">
+                  <input type="hidden" name="data-allocation" value="{{ object.user.allocation }}">
+                    <div class="control-group">
+                        <label class="control-label"></label>
+                        <div class="controls">
+                            Are you sure you want to remove project named: <strong>{{ employee.username }}</strong>?
+                        </div>
+                    </div>
+              <div class="form-actions">
+              <button type="submit" value="Confirm" class="btn btn-danger" id="delete">Yes</button>
+              <button type="button" value="Cancel" class="btn btn-light"><a href="{% url 'allocationlist' %}">No</a></button>
+              </div>
+              {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+              {% endif %}<br>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="{% static 'js/deleteallocation.js' %}"></script>
+{% endblock %}

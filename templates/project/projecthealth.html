@@ -1,0 +1,44 @@
+{% extends "index.html" %}
+
+{% load crispy_forms_tags %}
+
+{% load i18n %}
+
+{% block content %}
+    <div class="span6">
+            <div class="widget-box">
+              <div class="widget-title">
+                <h5>Projects Health</h5>
+              </div>
+              <div class="widget-content nopadding">
+                <table class="table table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Project Title</th>
+                      <th>Health</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for d in data %}
+                    <tr>
+                      <td class="taskStatus">{{ d.element2 }}</td>
+                        {% if 10 > d.element1 %}
+                            <td class="taskStatus"><span class="in-progress">Fail({{ d.element1 }})</span></td>
+                            <td class="taskDesc"></td>
+                        {% elif 10 < d.element1 and d.element1 < 25 %}
+                            <td class="taskStatus"><span class="pending">Critical({{ d.element1 }})</span></td>
+                        {% elif 25 < d.element1 and d.element1 < 50 %}
+                            <td class="taskStatus"><span class="in-progress">Bad({{ d.element1 }})</span></td>
+                        {% elif d.element1 > 50 %}
+                            <td class="taskStatus"><span class="done">Good({{ d.element1 }})</span></td>
+                        {% else %}
+                            <td class="taskStatus">{{ d.element1 }}</td>
+                        {% endif %}
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+    </div>
+{% endblock %}

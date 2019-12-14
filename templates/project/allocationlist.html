@@ -1,0 +1,63 @@
+{% extends "index.html" %}
+
+{% load crispy_forms_tags %}
+
+{% load i18n %}
+
+{% block content %}
+<div class="span6">
+        <div class="widget-box">
+          <div class="widget-title">
+            <h5>Allocated Resources List</h5>
+          </div>
+          <div class="widget-content nopadding">
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Project Name</th>
+                  <th>Employee Username</th>
+                  <th>Role</th>
+                  <th>Allocation in percentage</th>
+                  <th>Update/Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for t in projectallocation_list %}
+                <tr>
+                  <td class="taskDesc">{{ t.project.name }}</td>
+                  <td class="taskDesc">{{ t.user.username }}</td>
+                  <td class="taskDesc">{{ t.get_role_display }}</td>
+                  <td class="taskDesc">{{ t.allocation }}</td>
+                  <td class="taskOptions"><a href="{% url 'allocationupdate' t.id %}" class="tip-top" data-original-title="Update"><i class="icon-pencil"></i></a>
+                      <a href="{% url 'allocationdelete' t.user.id t.allocation %}" class="tip-top" data-original-title="Delete"><i class="icon-remove"></i></a></td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+  {% if is_paginated %}
+        <nav aria-label="Page navigation example">
+          <div class="pagination dataTables_paginate fg-buttonset ui-buttonset fg-buttonset-multi ui-buttonset-multi paging_full_numbers">
+            {% if page_obj.has_previous %}
+                <a class="previous fg-button ui-button ui-state-default page-link ui-state-disabled" href="?page={{ page_obj.previous_page_number }}"><strong>&laquo;</strong></a>
+            {% else %}
+              <a class="previous fg-button ui-button ui-state-default page-link ui-state-default"><span>&laquo;</span></a>
+            {% endif %}
+            {% for i in paginator.page_range %}
+              {% if page_obj.number == i %}
+                <a class="page-item active page-link fg-button ui-button ui-state-disabled" href="#"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+              {% else %}
+                <a class="page-link fg-button ui-button ui-state-default" href="?page={{ i }}">{{ i }}</a>
+              {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}" class="page-item page-link page-link fg-button ui-button ui-state-disabled">&raquo;</a>
+            {% else %}
+              <a class="page-link fg-button ui-button ui-state-default ui-state-default"><span>&raquo;</span></a>
+            {% endif %}
+          </div>
+        </nav>
+    {% endif %}
+</div>
+{% endblock %}

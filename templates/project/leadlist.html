@@ -1,0 +1,36 @@
+{% extends "index.html" %}
+
+{% load crispy_forms_tags %}
+
+{% load i18n %}
+
+{% block content %}
+<div class="span6">
+        <div class="widget-box">
+          <div class="widget-title">
+            <h5>Team Leads</h5>
+          </div>
+          <div class="widget-content nopadding">
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Project Name</th>
+                  <th>Team Lead</th>
+                  <th>Update/Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for t in teamlead_list %}
+                <tr>
+                  <td class="taskDesc">{{ t.project.name }}</td>
+                  <td class="taskDesc">{{ t.user.username }}</td>
+                  <td class="taskOptions"><a href="{% url 'leadupdate' t.id %}" class="tip-top" data-original-title="Update"><i class="icon-pencil"></i></a>
+                      <a href="{% url 'leaddelete' t.id %}" class="tip-top" data-original-title="Delete"><i class="icon-remove"></i></a></td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "index.html" %}
+
+{% load crispy_forms_tags %}
+
+{% load i18n %}
+
+{% block content %}
+<div class="span6">
+        <div class="widget-box">
+          <div class="widget-title">
+            <h5>Employee List</h5>
+          </div>
+          <div class="widget-content nopadding">
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Email id</th>
+                  <th>Alloted Projects</th>
+                  <th>Opts</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for employee in user_list %}
+              <input type="hidden" id="custId" name="employeeid" value="{{ employee.id }}">
+                <tr>
+                  <td class="taskDesc"><i class="icon-info-sign"></i>{{ employee.username }}</td>
+                  <td class="taskStatus"><span class="in-progress">{{ employee.email }}</span></td>
+                  <td class="taskStatus"><span class="in-progress">123</span></td>
+                  <td class="taskOptions"><a href="{% url 'update' employee.id %}" class="tip-top" data-original-title="Update"><i class="icon-pencil"></i></a> <a href="{% url 'delete' employee.id %}" class="tip-top" data-original-title="Delete"><i class="icon-remove"></i></a></td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+</div>
+{% endblock %}

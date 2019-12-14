@@ -1,0 +1,28 @@
+{% extends "index.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% load i18n %}
+
+{% block content %}
+<canvas id="selectedemployeechart" width="300" height="50"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+<script>
+                  var ctx = document.getElementById('selectedemployeechart').getContext('2d');
+                  var data = JSON.parse('{{ data | safe }}');
+                  console.log(data)
+                  var myBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: data.projects,
+            datasets: [{
+                backgroundColor: 'rgb(123, 99, 132)',
+                borderColor: 'rgb(12, 99, 132)',
+                label: 'Percentage vs Projects',
+                data: data.allocation,
+            }]
+        },
+
+    });
+</script>
+{% endblock %}
