@@ -4,17 +4,28 @@ from task.models import Task, TaskAllocation
 import json
 
 def userallocatedinproject():
-    context = {
-        'allocatedusers': User.objects.filter(id__in=ProjectAllocation.objects.all().values('user_id')),
-        'allocatepercent': (User.objects.filter(id__in=ProjectAllocation.objects.all().values('user_id')).count() / User.user_query().get(
-            'allusers').count()) * 100,
-        'failpercent': (Project.objects.filter(status='closed').count() / Project.project_query().get(
-                'allprojects').count()) * 100,
-        'finishpercent': (Project.objects.filter(status='created').count() / Project.project_query().get(
-                'allprojects').count()) * 100,
-        'wellpercent': (Project.objects.filter(status='Underprogress').count() / Project.project_query().get(
-                'allprojects').count()) * 100
-    }
+    if User.user_query().get('allusers').count() and Project.project_query().get(
+                'allprojects').count():
+
+        context = {
+            'allocatedusers': User.objects.filter(id__in=ProjectAllocation.objects.all().values('user_id')),
+            'allocatepercent': (User.objects.filter(id__in=ProjectAllocation.objects.all().values('user_id')).count() / User.user_query().get(
+                'allusers').count()) * 100,
+            'failpercent': (Project.objects.filter(status='closed').count() / Project.project_query().get(
+                    'allprojects').count()) * 100,
+            'finishpercent': (Project.objects.filter(status='created').count() / Project.project_query().get(
+                    'allprojects').count()) * 100,
+            'wellpercent': (Project.objects.filter(status='Underprogress').count() / Project.project_query().get(
+                    'allprojects').count()) * 100
+        }
+    else:
+        context = {
+            'allocatedusers': User.objects.filter(id__in=ProjectAllocation.objects.all().values('user_id')),
+            'allocatepercent': (User.objects.filter(id__in=ProjectAllocation.objects.all().values('user_id')).count() / 1) * 100,
+            'failpercent': (Project.objects.filter(status='closed').count() / 1) * 100,
+            'finishpercent': (Project.objects.filter(status='created').count() / 1) * 100,
+            'wellpercent': (Project.objects.filter(status='Underprogress').count() / 1) * 100
+        }
     return context
 
 def allocationchart_query():
