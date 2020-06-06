@@ -136,8 +136,11 @@ class ProjectView(View):
                                                                'error': 'error',
                                                                'employee': User.objects.all()})
             else:
-                project = Project.objects.latest('id')
-                project = project.id
+                try:
+                    project = Project.objects.latest('id')
+                    project = project.id + 1
+                except Exception as e:
+                    project = 1
                 if request.POST.get('lead'):
                     projectview_query(project, request.POST.get('lead'), request.POST.get('name'), request.POST.get('description'), request.POST.get('start_date'), request.POST.get('end_date'), request.POST.get('status'))
                 form = Allocateemployeesssform
