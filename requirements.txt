@@ -1,5 +1,8 @@
+amqp==2.6.0
 Babel==2.7.0
-# billiard==3.6.1.0
+billiard==3.6.3.0
+bootstrap4==0.1.0
+celery==4.4.4
 certifi==2019.9.11
 chardet==3.0.4
 defusedxml==0.6.0
@@ -12,6 +15,7 @@ et-xmlfile==1.0.1
 idna==2.8
 importlib-metadata==0.23
 jdcal==1.4.1
+kombu==4.6.10
 more-itertools==7.2.0
 npm==0.1.1
 oauthlib==3.1.0
@@ -20,7 +24,7 @@ optional-django==0.1.0
 phonenumbers==8.10.22
 psycopg2-binary==2.8.4
 python3-openid==3.1.0
-# pytz==2019.3
+pytz==2020.1
 requests==2.22.0
 requests-oauthlib==1.2.0
 sqlparse==0.3.0
