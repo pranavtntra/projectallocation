@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class RegistrationConfig(AppConfig):
-    name = 'registration'
+    name = "registration"
 
     def ready(self):
         import registration.signals

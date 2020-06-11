@@ -10,32 +10,98 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('project', '0001_initial'),
+        ("project", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Task',
+            name="Task",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=20)),
-                ('description', models.TextField(max_length=200)),
-                ('deadline', models.DateField()),
-                ('status', models.CharField(choices=[('created', 'Created'), ('underqa', 'Under QA'), ('underuat', 'Under UAT'), ('approved', 'Approved'), ('merged', 'Merged')], default='Created', max_length=200)),
-                ('weightage', models.IntegerField(blank=True, null=True)),
-                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='task.Task')),
-                ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.Project')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=20)),
+                ("description", models.TextField(max_length=200)),
+                ("deadline", models.DateField()),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("created", "Created"),
+                            ("underqa", "Under QA"),
+                            ("underuat", "Under UAT"),
+                            ("approved", "Approved"),
+                            ("merged", "Merged"),
+                        ],
+                        default="Created",
+                        max_length=200,
+                    ),
+                ),
+                ("weightage", models.IntegerField(blank=True, null=True)),
+                (
+                    "parent",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="task.Task",
+                    ),
+                ),
+                (
+                    "project",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="project.Project",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='TaskAllocation',
+            name="TaskAllocation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('role', models.CharField(choices=[('Developer', 'Developer'), ('UI Designer', 'UI Designer'), ('QA', 'QA')], max_length=201)),
-                ('allocation', models.IntegerField(blank=True, default=0)),
-                ('task', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='taskallocation', to='task.Task')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "role",
+                    models.CharField(
+                        choices=[
+                            ("Developer", "Developer"),
+                            ("UI Designer", "UI Designer"),
+                            ("QA", "QA"),
+                        ],
+                        max_length=201,
+                    ),
+                ),
+                ("allocation", models.IntegerField(blank=True, default=0)),
+                (
+                    "task",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="taskallocation",
+                        to="task.Task",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

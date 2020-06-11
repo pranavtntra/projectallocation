@@ -17,8 +17,5 @@ class User(AbstractUser):
 
     @classmethod
     def user_query(cls):
-        context = {'allusers': cls.objects.all()}
+        context = {"allusers": cls.objects.all()}
         return context
-
-
-

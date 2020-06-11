@@ -4,21 +4,22 @@ from registration.models import User
 
 class Project(models.Model):
     STATUS_CHOICES = [
-        ('underprogress', 'Under progress'),
-        ('created', 'Created'),
-        ('closed', 'Closed'),
+        ("underprogress", "Under progress"),
+        ("created", "Created"),
+        ("closed", "Closed"),
     ]
     name = models.CharField(blank=False, max_length=20, unique=True)
     description = models.TextField(blank=False, max_length=200)
     start_date = models.DateField(blank=False)
     end_date = models.DateField(blank=False)
-    status = models.CharField(max_length=200, choices=STATUS_CHOICES, default='created')
+    status = models.CharField(max_length=200, choices=STATUS_CHOICES, default="created")
 
     def __str__(self):
         return self.name
+
     @staticmethod
     def project_query():
-        context = {'allprojects': Project.objects.all()}
+        context = {"allprojects": Project.objects.all()}
         return context
 
 
@@ -32,9 +33,9 @@ class Teamlead(models.Model):
 
 class ProjectAllocation(models.Model):
     ROLE_CHOICES = [
-        ('Developer', 'Developer'),
-        ('UI Designer', 'UI Designer'),
-        ('QA', 'QA'),
+        ("Developer", "Developer"),
+        ("UI Designer", "UI Designer"),
+        ("QA", "QA"),
     ]
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -43,8 +44,6 @@ class ProjectAllocation(models.Model):
 
     def __str__(self):
         return self.get_role_display()
-
-
 
     # def clean_email(self):
     #     allocation = self.cleaned_data['allocation']
