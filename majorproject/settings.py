@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECRET_KEY = '*zfn6t@3r2yz(h@ufo%!y4al@f&-nq4x7(s2@tu*ywhib2u02_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+DEBUG = True
 SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = os.environ.get('DEBUG', default=False, cast=bool)
+# DEBUG = os.environ.get('DEBUG', default=False, cast=bool)
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL')
