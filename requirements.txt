@@ -68,7 +68,6 @@ protobuf==3.6.1
 psutil==5.5.1
 psycopg2-binary==2.8.4
 Pygments==2.3.1
-PyGObject==3.36.0
 pyinotify==0.9.6
 PyJWT==1.7.1
 pymacaroons==0.13.0
