@@ -30,7 +30,6 @@ django-crispy-forms==1.8.0
 django-npm==1.0.0
 django-phonenumber-field==3.0.1
 docutils==0.16
-duplicity==0.8.12.0
 entrypoints==0.3
 et-xmlfile==1.0.1
 fasteners==0.14.1
