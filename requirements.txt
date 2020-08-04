@@ -47,7 +47,6 @@ jdcal==1.4.1
 jedi==0.15.2
 Jinja2==2.10.1
 jmespath==0.9.4
-kazam==1.4.5
 keyring==18.0.1
 keyrings.alt==3.4.0
 kombu==4.6.10
