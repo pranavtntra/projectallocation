@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os
+import os, dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,15 +20,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '*zfn6t@3r2yz(h@ufo%!y4al@f&-nq4x7(s2@tu*ywhib2u02_'
+# SECRET_KEY = '*zfn6t@3r2yz(h@ufo%!y4al@f&-nq4x7(s2@tu*ywhib2u02_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-# SECRET_KEY = config('SECRET_KEY')
-# DEBUG = config('DEBUG', default=False, cast=bool)
+# DEBUG = True
+SECRET_KEY = os.environ.get('SECRET_KEY')
+DEBUG = os.environ.get('DEBUG', default=False, cast=bool)
 DATABASES = {
     'default': dj_database_url.config(
-        default="postgres://scwzhijbdnezrt:b875694206928c4cc38c1a0810d20b4dc1ff71842c1ea6bafa8ab48a053e00fe@ec2-18-211-48-247.compute-1.amazonaws.com:5432/d9hi5nd5od1h2b"
+        default=os.environ.get('DATABASE_URL')
     )
 }
 
