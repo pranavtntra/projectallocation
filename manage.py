@@ -5,12 +5,7 @@ import sys
 
 
 def main():
-    ENVIRONMENT_TYPE = os.environ.get('ENVIRONMENT_TYPE', "development")
-
-    if ENVIRONMENT_TYPE == 'development':
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'majorproject.settings.development')
-    else:
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'majorproject.settings.production')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'majorproject.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
