@@ -14,7 +14,7 @@ from whitenoise.django import DjangoWhiteNoise
 # env = environ.Env()
 # env.read_env()
 
-ENVIRONMENT_TYPE = os.environ.get('ENVIRONMENT_TYPE', "development")
+ENVIRONMENT_TYPE = "production"
 
 if ENVIRONMENT_TYPE == 'development':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'majorproject.settings.development')
