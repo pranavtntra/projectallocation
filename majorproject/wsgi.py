@@ -11,7 +11,16 @@ import os
 from django.core.wsgi import get_wsgi_application
 from whitenoise.django import DjangoWhiteNoise
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'majorproject.settings')
+# env = environ.Env()
+# env.read_env()
+
+ENVIRONMENT_TYPE = os.environ.get('ENVIRONMENT_TYPE', "development")
+
+if ENVIRONMENT_TYPE == 'development':
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'majorproject.settings.development')
+else:
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'majorproject.settings.production')
+
 
 application = get_wsgi_application()
 application = DjangoWhiteNoise(application)
